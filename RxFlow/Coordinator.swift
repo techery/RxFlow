@@ -264,7 +264,10 @@ extension Coordinator: FlowCoordinatorDelegate {
 
     func endFlowCoordinator(withIdentifier identifier: String) {
         _ = self.synchronized { [unowned self] in
-            self.flowCoordinators.removeValue(forKey: identifier)
+            self.flowCoordinators = self.flowCoordinators.filter {
+                return $0.key != identifier &&
+                    $0.value.parentFlowCoordinator?.identifier != identifier
+            }
         }
     }
 
